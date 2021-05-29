@@ -9,11 +9,9 @@
 /epgstation/thumbnail/*.jpg
 /epgstation/data/streamfiles/*.ts
 /epgstation/data/streamfiles/*.m3u8
-/epgstation/config/*.yml
 !/epgstation/config/config.yml.template
 !/epgstation/config/operatorLogConfig.sample.yml
 !/epgstation/config/epgUpdaterLogConfig.sample.yml
 !/epgstation/config/serviceLogConfig.sample.yml
 /epgstation/data/*.json
-/docker-compose.yml
 !.gitkeep
