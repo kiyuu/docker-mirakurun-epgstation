@@ -13,9 +13,9 @@ const output_dir = path.dirname(output);
 
 //FFmpegオプション生成 ここから
 const args = ['-y'];
-const preset = 'medium';
-const codec = 'libx264'; //libx264でエンコード
-const crf = 23;
+const preset = 'veryfast';
+const codec = 'h264_v4l2m2m'; //libx264でエンコード
+const bitrate = '5000k';
 const videoFilter = 'yadif';
 
 if (isDualMono) {
@@ -42,7 +42,7 @@ Array.prototype.push.apply(args,[
     '-preset', preset,
     '-aspect', '16:9',
     '-c:v', codec,
-    '-crf', crf,
+    '-b:v', bitrate,
     '-f', 'mp4',
 
 ]);
