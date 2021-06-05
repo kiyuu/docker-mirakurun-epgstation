@@ -21,13 +21,6 @@ services:
         devices:
             - /dev/bus:/dev/bus
             - /dev/dvb:/dev/dvb
-            - /dev/video10:/dev/video10
-            - /dev/video11:/dev/video11
-            - /dev/video12:/dev/video12
-            - /dev/video13:/dev/video13
-            - /dev/video14:/dev/video14
-            - /dev/video15:/dev/video15
-            - /dev/video16:/dev/video16
         restart: always
         logging:
             driver: json-file
@@ -63,6 +56,14 @@ services:
             - ./recorded:/app/recorded
         environment:
             TZ: "Asia/Tokyo"
+        devices:
+            - /dev/video10:/dev/video10
+            - /dev/video11:/dev/video11
+            - /dev/video12:/dev/video12
+            - /dev/video13:/dev/video13
+            - /dev/video14:/dev/video14
+            - /dev/video15:/dev/video15
+            - /dev/video16:/dev/video16
         depends_on:
             - mirakurun
             - mysql
