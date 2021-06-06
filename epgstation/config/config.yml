@@ -20,7 +20,7 @@ epgUpdateIntervalTime: 10
 conflictPriority: 1
 recPriority: 2
 
-recordedFormat: '%YEAR%年%MONTH%月%DAY%日%HOUR%時%MIN%分%SEC%秒-%TITLE%'
+recordedFormat: '%TITLE%_%HALF_WIDTH_CHNAME%_%YEAR%/%MONTH%/%DAY% %HOUR%:%MIN%:%SEC%'
 recordedFileExtension: .ts
 recorded:
     - name: recorded
@@ -36,12 +36,20 @@ ffprobe: /usr/local/bin/ffprobe
 encodeProcessNum: 4
 concurrentEncodeNum: 1
 encode:
-    - name: H.264
-      cmd: '%NODE% %ROOT%/config/enc.js'
+    - name: jlseNoVf
+      cmd: '%NODE% %ROOT%/config/jlseNoVf.js'
       suffix: .mp4
+      rate: 4.0
+    - name: jlseOnlyCut
+      cmd: '%NODE% %ROOT%/config/jlseOnlyCut.js'
+      suffix: .ts
       rate: 4.0
     - name: jlse
       cmd: '%NODE% %ROOT%/config/jlse.js'
+      suffix: .mp4
+      rate: 4.0
+    - name: H.264
+      cmd: '%NODE% %ROOT%/config/enc.js'
       suffix: .mp4
       rate: 4.0
 urlscheme:

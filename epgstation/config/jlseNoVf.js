@@ -16,7 +16,6 @@ const args = ['-y'];
 const preset = 'veryfast';
 const codec = 'h264_v4l2m2m';
 const bitrate = '5M';
-const videoFilter = 'fieldmatch -movflags +faststart';
 
 if (isDualMono) {
     Array.prototype.push.apply(args, [
@@ -38,7 +37,6 @@ Array.prototype.push.apply(args, ['-ignore_unknown']);
 
 // その他設定
 Array.prototype.push.apply(args,[
-    '-vf', videoFilter,
     '-preset', preset,
     '-aspect', '16:9',
     '-c:v', codec,
