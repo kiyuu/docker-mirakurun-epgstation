@@ -11,11 +11,7 @@ services:
         volumes:
             - ./mirakurun/conf:/app-config
             - ./mirakurun/data:/app-data
-            - ./join_logo_scp_trial/JL:/join_logo_scp_trial/JL
             - ./join_logo_scp_trial/logo:/join_logo_scp_trial/logo
-            - ./join_logo_scp_trial/result:/join_logo_scp_trial/result
-            - ./join_logo_scp_trial/setting:/join_logo_scp_trial/setting
-            - ./join_logo_scp_trial/src:/join_logo_scp_trial/src 
         environment:
             TZ: "Asia/Tokyo"
         devices:
