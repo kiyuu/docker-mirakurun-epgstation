@@ -20,7 +20,7 @@ epgUpdateIntervalTime: 10
 conflictPriority: 1
 recPriority: 2
 
-recordedFormat: '%TITLE%_%HALF_WIDTH_CHNAME%_%YEAR%/%MONTH%/%DAY% %HOUR%:%MIN%:%SEC%'
+recordedFormat: '%TITLE%_%HALF_WIDTH_CHNAME%_%YEAR%_%MONTH%_%DAY% %HOUR%:%MIN%:%SEC%'
 recordedFileExtension: .ts
 recorded:
     - name: recorded
