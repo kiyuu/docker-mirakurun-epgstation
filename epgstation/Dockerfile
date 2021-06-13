@@ -4,7 +4,7 @@ ENV DEV="make gcc git g++ automake curl wget autoconf build-essential libass-dev
 RUN set -xe && \
     apt-get update && \
     apt-get install --no-install-recommends -y \
-       curl git make gcc g++ build-essential cmake ninja-build libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx265-dev libx264-dev libxft-dev libavcodec-dev libavformat-dev libswscale-dev libatomic-ops-dev automake libtool autoconf nodejs && \
+       curl git make gcc g++ build-essential cmake ninja-build libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx265-dev libx264-dev libaribb24-dev libass-dev libxft-dev libavcodec-dev libavformat-dev libswscale-dev libatomic-ops-dev automake libtool autoconf nodejs && \
     apt-get install --no-install-recommends -y \
        meson npm && \
 \
@@ -45,7 +45,7 @@ RUN set -xe && \
     cd /tmp/ && \
     git clone --depth 1 https://github.com/FFmpeg/FFmpeg.git -b release/4.4 && \
     cd FFmpeg && \
-    ./configure --extra-ldflags="-latomic" --extra-cflags="-I/usr/local/include" --extra-ldflags="-L/usr/local/lib" --arch=aarch64 --target-os=linux --enable-gpl --disable-doc --disable-debug --enable-pic --enable-avisynth --enable-libx264 --enable-libx265 --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libvpx --enable-nonfree --extra-libs=-ldl && \
+    ./configure --extra-ldflags="-latomic" --extra-cflags="-I/usr/local/include" --extra-ldflags="-L/usr/local/lib" --arch=aarch64 --target-os=linux --enable-gpl --disable-doc --disable-debug --enable-pic --enable-avisynth --enable-libx264 --enable-libx265 --enable-libaribb24 --enable-libass --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libvpx --enable-nonfree --extra-libs=-ldl && \
     make -j4 && \
     make install && \
 \
@@ -111,4 +111,4 @@ RUN set -xe && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp/FFmpeg
+    rm -rf /tmp
