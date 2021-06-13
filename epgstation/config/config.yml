@@ -28,7 +28,7 @@ recorded:
 
 thumbnail: '%ROOT%/thumbnail'
 thumbnailSize: 480x270
-thumbnailPosition: 5
+thumbnailPosition: 7
 
 ffmpeg: /usr/local/bin/ffmpeg
 ffprobe: /usr/local/bin/ffprobe
@@ -69,7 +69,7 @@ stream:
                 - name: 720p
                   cmd:
                       '%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 192k -ac 2
-                      -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -preset veryfast -y -f mpegts pipe:1'
+                      -c:v h264_v4l2m2m -b:v 3000k -preset veryfast -y -f mpegts pipe:1'
                 - name: 480p
                   cmd:
                       '%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 128k -ac 2
@@ -105,16 +105,12 @@ stream:
             mp4:
                 - name: 720p
                   cmd:
-                      '%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 192k -ac 2
-                      -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -profile:v baseline -preset veryfast -tune
-                      fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4
-                      pipe:1'
+                      '%FFMPEG% -i pipe:0 -sn -threads 0 -acodec aac -ar 48000 -ab 256K -c:v h264_v4l2m2m -b:v 3000k 
+                      -aspect 16:9 -preset veryfast -y -f mp4 pipe:1'
                 - name: 480p
                   cmd:
-                      '%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 128k -ac 2
-                      -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -profile:v baseline -preset veryfast -tune
-                      fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4
-                      pipe:1'
+                      '%FFMPEG% -i pipe:0 -sn -threads 0 -acodec aac -ar 48000 -ab 128K -c:v h264_v4l2m2m -b:v 1500k 
+                      -aspect 16:9 -preset veryfast -y -f mp4 pipe:1'
 
             hls:
                 - name: 720p
