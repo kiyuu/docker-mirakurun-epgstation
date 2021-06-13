@@ -17,6 +17,24 @@ const preset = 'veryfast';
 const codec = 'h264_v4l2m2m';
 const bitrate = '5M';
 
+if (isDualMono) {
+    Array.prototype.push.apply(args, [
+        '-filter_complex',
+        'channelsplit[FL][FR]',
+        '-map', '0:v',
+        '-map', '[FL]',
+        '-map', '[FR]',
+        '-metadata:s:a:0', 'language=jpn',
+        '-metadata:s:a:1', 'language=eng',
+    ]);
+    Array.prototype.push.apply(args, ['-c:a ac3', '-ar 48000', '-ab 256k']);
+} else {
+    // audio dataをコピー
+    Array.prototype.push.apply(args, ['-c:a', 'aac']);
+}
+
+Array.prototype.push.apply(args, ['-ignore_unknown']);
+
 // その他設定
 Array.prototype.push.apply(args,[
     '-c', 'copy',
