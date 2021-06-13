@@ -20,7 +20,7 @@ epgUpdateIntervalTime: 10
 conflictPriority: 1
 recPriority: 2
 
-recordedFormat: '%TITLE%_%HALF_WIDTH_CHNAME%_%YEAR%_%MONTH%_%DAY% %HOUR%:%MIN%:%SEC%'
+recordedFormat: '%TITLE%_%HALF_WIDTH_CHNAME%_%YEAR%_%MONTH%_%DAY%'
 recordedFileExtension: .ts
 recorded:
     - name: recorded
@@ -187,16 +187,12 @@ stream:
             mp4:
                 - name: 720p
                   cmd:
-                      '%FFMPEG% -dual_mono_mode main -ss %SS% -i %INPUT% -sn -threads 0 -c:a aac -ar 48000 -b:a 192k -ac
-                      2 -c:v libx264 -vf scale=-2:720 -b:v 3000k -profile:v baseline -preset veryfast -tune
-                      fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4
-                      pipe:1'
+                      '%FFMPEG% -i pipe:0 -sn -threads 0 -acodec aac -ar 48000 -ab 256K -c:v h264_v4l2m2m -b:v 3000k 
+                      -aspect 16:9 -preset veryfast -y -f mp4 pipe:1'
                 - name: 480p
                   cmd:
-                      '%FFMPEG% -dual_mono_mode main -ss %SS% -i %INPUT% -sn -threads 0 -c:a aac -ar 48000 -b:a 128k -ac
-                      2 -c:v libx264 -vf scale=-2:480 -b:v 1500k -profile:v baseline -preset veryfast -tune
-                      fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4
-                      pipe:1'
+                      '%FFMPEG% -i pipe:0 -sn -threads 0 -acodec aac -ar 48000 -ab 128K -c:v h264_v4l2m2m -b:v 1500k 
+                      -aspect 16:9 -preset veryfast -y -f mp4 pipe:1'
 
             hls:
                 - name: 720p
