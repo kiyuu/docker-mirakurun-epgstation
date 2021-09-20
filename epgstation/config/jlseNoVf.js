@@ -13,37 +13,33 @@ const output_dir = path.dirname(output);
 
 //FFmpegオプション生成 ここから
 const args = ['-y'];
-const preset = 'veryfast';
-const codec = 'h264_v4l2m2m';
 const bitrate = '5M';
 
+// 字幕用
+Array.prototype.push.apply(args, ['-fix_sub_duration']);
+// input 設定
+Array.prototype.push.apply(args, ['-i', input]);
+// ビデオストリーム設定
+Array.prototype.push.apply(args, ['-map', '0:v', '-c:v', 'h264_v4l2m2m']);
+// オーディオストリーム設定
 if (isDualMono) {
     Array.prototype.push.apply(args, [
         '-filter_complex',
         'channelsplit[FL][FR]',
-        '-map', '0:v',
         '-map', '[FL]',
         '-map', '[FR]',
         '-metadata:s:a:0', 'language=jpn',
         '-metadata:s:a:1', 'language=eng',
     ]);
-    Array.prototype.push.apply(args, ['-c:a ac3', '-ar 48000', '-ab 256k']);
 } else {
-    // audio dataをコピー
-    Array.prototype.push.apply(args, ['-c:a', 'aac']);
+    Array.prototype.push.apply(args, ['-map', '0:a']);
 }
-
+Array.prototype.push.apply(args, ['-c:a', 'aac']);
+// 字幕ストリーム設定
+Array.prototype.push.apply(args, ['-map', '0:s?', '-c:s', 'mov_text']);
+// 品質設定
+Array.prototype.push.apply(args, ['-preset', 'veryfast', '-crf', '26', '-b:v', bitrate, '-aspect', '16:9', '-f', 'mp4']);
 Array.prototype.push.apply(args, ['-ignore_unknown']);
-
-// その他設定
-Array.prototype.push.apply(args,[
-    '-preset', preset,
-    '-aspect', '16:9',
-    '-c:v', codec,
-    '-b:v', bitrate,
-    '-f', 'mp4',
-
-]);
 
 let str = '';
 for (let i of args) {
@@ -176,58 +172,95 @@ const getDuration = filePath => {
               }
 
               case str.startsWith('frame') && str:{ //FFmpeg
+                // 想定log
                 // frame= 2847 fps=0.0 q=-1.0 Lsize=  216432kB time=00:01:35.64 bitrate=18537.1kbits/s speed= 222x
                 const progress = {};
-                let tmp = (str + ' ').match(/[A-z]*=[A-z,0-9,\s,.,\/,:,-]* /g);
-                if (tmp === null) continue;
-                for (let j = 0; j < tmp.length; j++) {
-                  progress[tmp[j].split('=')[0]] = tmp[j].split('=')[1].replace(/\r/g, '').trim();
-                }
-                progress['frame'] = parseInt(progress['frame']);
-                progress['fps'] = parseFloat(progress['fps']);
-                progress['q'] = parseFloat(progress['q']);
+                const ffmpeg_reg = /frame=\s*(?<frame>\d+)\sfps=\s*(?<fps>\d+(?:\.\d+)?)\sq=\s*(?<q>[+-]?\d+(?:\.\d+)?)\sL?size=\s*(?<size>\d+(?:\.\d+)?)kB\stime=\s*(?<time>\d+[:\.\d+]*)\sbitrate=\s*(?<bitrate>\d+(?:\.\d+)?)kbits\/s(?:\sdup=\s*(?<dup>\d+))?(?:\sdrop=\s*(?<drop>\d+))?\sspeed=\s*(?<speed>\d+(?:\.\d+)?)x/;
+                let ffmatch =str.match(ffmpeg_reg);
+                /**
+                 * match結果
+                 * [
+                 *   'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kbits/s dup=19 drop=0 speed=0.372x',
+                 *   '5159',
+                 *   '11',
+                 *   '29.0',
+                 *   '122624',
+                 *   '00:02:51.84',
+                 *   '5845.8',
+                 *   '19',
+                 *   '0',
+                 *   '0.372',
+                 *   index: 0,
+                 *   input: 'frame= 5159 fps= 11 q=29.0 size=  122624kB time=00:02:51.84 bitrate=5845.8kbits/s dup=19 drop=0 speed=0.372x    \r',
+                 *   groups: [Object: null prototype] {
+                 *     frame: '5159',
+                 *     fps: '11',
+                 *     q: '29.0',
+                 *     size: '122624',
+                 *     time: '00:02:51.84',
+                 *     bitrate: '5845.8',
+                 *     dup: '19',
+                 *     drop: '0',
+                 *     speed: '0.372'
+                 *   }
+                 * ]
+                 */
+
+                if (ffmatch === null) continue;
+
+                progress['frame'] = parseInt(ffmatch.groups.frame);
+                progress['fps'] = parseFloat(ffmatch.groups.fps);
+                progress['q'] = parseFloat(ffmatch.groups.q);
+                progress['size'] = parseInt(ffmatch.groups.size);
+                progress['time'] = ffmatch.groups.time;
+                progress['bitrate'] = parseFloat(ffmatch.groups.bitrate);
+                progress['dup'] = ffmatch.groups.dup == null ? 0 : parseInt(ffmatch.groups.dup);
+                progress['drop'] = ffmatch.groups.drop == null ? 0 : parseInt(ffmatch.groups.drop);
+                progress['speed'] = parseFloat(ffmatch.groups.speed);
 
                 let current = 0;
                 const times = progress.time.split(':');
                 for (let i = 0; i < times.length; i++) {
-                  if (i == 0) {
-                    current += parseFloat(times[i]) * 3600;
-                  } else if (i == 1) {
-                    current += parseFloat(times[i]) * 60;
-                  } else if (i == 2) {
-                    current += parseFloat(times[i]);
-                  }
+                    if (i == 0) {
+                        current += parseFloat(times[i]) * 3600;
+                    } else if (i == 1) {
+                        current += parseFloat(times[i]) * 60;
+                    } else if (i == 2) {
+                        current += parseFloat(times[i]);
+                    }
                 }
 
                 // 進捗率 1.0 で 100%
                 now_num = current;
                 total_num = duration;
                 log =
-                  '(4/4) FFmpeg: ' +
-                  //'frame= ' +
-                  //progress.frame +
-                  //' fps=' +
-                  //progress.fps +
-                  //' size=' +
-                  //progress.size +
-                  ' time=' +
-                  progress.time +
-                  //' bitrate=' +
-                  //progress.bitrate +
-                  ' speed=' +
-                  progress.speed;
-                update_log_flag = true;
-                break;
-              }
+                    '(4/4) FFmpeg: ' +
+                    'frame= ' +
+                    progress.frame +
+                    ' fps=' +
+                    progress.fps +
+                    ' size=' +
+                    progress.size +
+                    ' time=' +
+                    progress.time +
+                    ' bitrate=' +
+                    progress.bitrate +
+                    ' drop=' +
+                    progress.drop +
+                    ' speed=' +
+                    progress.speed;
+                    update_log_flag = true;
+                    break;
+                  }
 
-              default:{ //進捗表示に必要ない出力データを流す
-                console.log(strbyline[i]);
-                break;
-              }
-            }
-            percent = now_num / total_num;
-            if(update_log_flag) console.log(JSON.stringify({ type: 'progress', percent: percent, log: log }));
-            update_log_flag = false;
+                  default:{ //進捗表示に必要ない出力データを流す
+                    console.log(strbyline[i]);
+                    break;
+                  }
+                }
+                percent = now_num / total_num;
+                if(update_log_flag) console.log(JSON.stringify({ type: 'progress', percent: percent, log: log }));
+                update_log_flag = false;
         }
     });
 
@@ -237,7 +270,7 @@ const getDuration = filePath => {
     });
 
     process.on('SIGINT', () => {
-        process.kill(-child.pid, 'SIGINT');
+      process.kill(-child.pid, 'SIGINT');
     });
 
     child.on('close', code => {
