@@ -4,7 +4,7 @@ ENV DEV="make gcc git g++ automake curl wget autoconf build-essential libfreetyp
 RUN set -xe && \
     apt-get update && \
     apt-get install --no-install-recommends -y \
-       curl git make gcc g++ build-essential cmake ninja-build libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx265-dev libx264-dev libaribb24-dev libass-dev libxft-dev libavcodec-dev libavformat-dev libswscale-dev libatomic-ops-dev automake libtool autoconf nodejs && \
+       curl git make gcc g++ build-essential cmake ninja-build libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx265-dev libx264-dev libaribb24-dev libass9 libass-dev libxft-dev libavcodec-dev libavformat-dev libswscale-dev libatomic-ops-dev automake libtool autoconf nodejs && \
     apt-get install --no-install-recommends -y \
        meson npm && \
 \
