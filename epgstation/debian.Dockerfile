@@ -103,6 +103,7 @@ RUN set -xe && \
     cd delogo-AviSynthPlus-Linux/src && \
     make && \
     cp libdelogo.so /join_logo_scp_trial && \
+    cp libdelogo.so /usr/local/lib/avisynth/libdelogo.so && \
 # 不要なパッケージを削除
     apt-get -y remove $DEV && \
     apt-get autoremove -y && \
