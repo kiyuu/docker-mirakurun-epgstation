@@ -1,10 +1,10 @@
 FROM l3tnun/epgstation:master-debian 
-ENV DEV="make gcc git g++ automake curl wget autoconf build-essential libfreetype6-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo zlib1g-dev"
+ENV DEV="make gcc git g++ automake wget autoconf build-essential libfreetype6-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo zlib1g-dev"
 
 RUN set -xe && \
     apt-get update && \
     apt-get install --no-install-recommends -y \
-       curl git make gcc g++ build-essential cmake ninja-build libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx265-dev libx264-dev libaribb24-dev libass9 libass-dev libxft-dev libavcodec-dev libavformat-dev libswscale-dev libatomic-ops-dev automake libtool autoconf nodejs && \
+       curl jq git make gcc g++ build-essential cmake ninja-build libmp3lame-dev libopus-dev libvorbis-dev libvpx-dev libx265-dev libx264-dev libaribb24-dev libass9 libass-dev libxft-dev libavcodec-dev libavformat-dev libswscale-dev libatomic-ops-dev automake libtool autoconf nodejs && \
     apt-get install --no-install-recommends -y \
        meson npm && \
 \
