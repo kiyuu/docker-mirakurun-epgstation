@@ -15,12 +15,19 @@ const output_dir = path.dirname(output);
 const args = ['-y'];
 const bitrate = '5M';
 
-// 字幕用
-Array.prototype.push.apply(args, ['-fix_sub_duration']);
+Array.prototype.push.apply(args, ['-c:a', 'aac']);
+Array.prototype.push.apply(args, ['-ignore_unknown']);
+// 品質設定
+Array.prototype.push.apply(args, ['-preset', 'veryfast']);
+Array.prototype.push.apply(args, ['-aspect', '16:9']);
 // ビデオストリーム設定
-Array.prototype.push.apply(args, ['-map', '0:v', '-c:v', 'h264_v4l2m2m']);
+Array.prototype.push.apply(args, ['-c:v', 'h264_v4l2m2m']);
+Array.prototype.push.apply(args, ['-b:v', bitrate]);
+Array.prototype.push.apply(args, ['-f', 'mp4']);
+Array.prototype.push.apply(args, ['-map', '0:v']);
 // インターレス解除
 Array.prototype.push.apply(args, ['-vf', 'fieldmatch -movflags +faststart']);
+Array.prototype.push.apply(args, ['-crf', '26']);
 // オーディオストリーム設定
 if (isDualMono) {
     Array.prototype.push.apply(args, [
@@ -34,12 +41,10 @@ if (isDualMono) {
 } else {
     Array.prototype.push.apply(args, ['-map', '0:a']);
 }
-Array.prototype.push.apply(args, ['-c:a', 'aac']);
-// 字幕ストリーム設定
-Array.prototype.push.apply(args, ['-map', '0:s?', '-c:s', 'mov_text']);
-// 品質設定
-Array.prototype.push.apply(args, ['-preset', 'veryfast', '-crf', '26', '-b:v', bitrate, '-aspect', '16:9', '-f', 'mp4']);
-Array.prototype.push.apply(args, ['-ignore_unknown']);
+// // 字幕用
+// Array.prototype.push.apply(args, ['-fix_sub_duration']);
+// // 字幕ストリーム設定
+// Array.prototype.push.apply(args, ['-map', '0:s?', '-c:s', 'mov_text']);
 
 let str = '';
 for (let i of args) {
