@@ -2,28 +2,26 @@
   types:
     - BS
     - CS
-  command: /opt/recpt1 <channel> - -
+  command: recpt1 <channel> - -
   decoder: arib-b25-stream-test
 
 - name: PX4-S2
   types:
     - BS
     - CS
-  command: /opt/recpt1 <channel> - -
+  command: recpt1 <channel> - -
   decoder: arib-b25-stream-test
 
 - name: PX4-T1
   types:
-    - BS
-    - CS
-  command: /opt/recpt1 <channel> - -
+    - GR
+  command: recpt1 <channel> - -
   decoder: arib-b25-stream-test
 
 - name: PX4-T2
   types:
-    - BS
-    - CS
-  command: /opt/recpt1 <channel> - -
+    - GR
+  command: recpt1 <channel> - -
   decoder: arib-b25-stream-test
 
 - name: PT3-S1
