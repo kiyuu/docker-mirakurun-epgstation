@@ -11,11 +11,16 @@ services:
         volumes:
             - ./mirakurun/conf:/app-config
             - ./mirakurun/data:/app-data
+            - ./mirakurun/opt:/opt
         environment:
             TZ: "Asia/Tokyo"
         devices:
             - /dev/bus:/dev/bus
             - /dev/dvb:/dev/dvb
+            - /dev/px4video0:/dev/px4video0
+            - /dev/px4video1:/dev/px4video1
+            - /dev/px4video2:/dev/px4video2
+            - /dev/px4video3:/dev/px4video3
         restart: always
         logging:
             driver: json-file
