@@ -2,10 +2,12 @@ ARG ARCH=
 FROM ${ARCH}node:16.13.1-buster AS build
 WORKDIR /app
 ENV DOCKER=YES
-ADD . .
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends build-essential && \
+    apt-get install -y --no-install-recommends build-essential git && \
+    git clone https://github.com/Chinachu/Mirakurun && \
+    cp -pR /app/Mirakurun/* /app && \
+    rm -r Mirakurun && \
     npm install && \
     npm run build && \
     npm install -g --unsafe-perm --production
