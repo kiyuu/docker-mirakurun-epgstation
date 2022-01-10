@@ -18,6 +18,7 @@ services:
             TZ: "Asia/Tokyo"
         devices:
             - /dev/bus:/dev/bus
+            - /dev/dvb:/dev/dvb
             - /dev/px4video0:/dev/px4video0
             - /dev/px4video1:/dev/px4video1
             - /dev/px4video2:/dev/px4video2
