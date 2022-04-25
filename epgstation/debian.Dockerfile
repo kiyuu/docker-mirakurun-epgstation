@@ -32,7 +32,7 @@ RUN set -xe && \
 # AviSynthPlus
 \
     cd /tmp/ && \
-    git clone --depth 1 git://github.com/AviSynth/AviSynthPlus.git && \
+    git clone --depth 1 https://github.com/AviSynth/AviSynthPlus.git && \
     cd AviSynthPlus && \
     mkdir avisynth-build && \
     cd avisynth-build && \
